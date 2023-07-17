@@ -1,0 +1,31 @@
+DONE:
+
+gradient colors -> done 22/6 11h55
+maze generation/maze dropdown{
+    Recursive division -> done 22/6 4h56 -> fixed 22/6 5:36
+    RandomizedKruskal -> done 22/6 8h44
+    RandomizedPrisms -> done 23/06 17h00
+}
+more settings -> {
+    added maze solving menu 24/6
+    need to fix the select width height -> done 28/6
+}
+reset button -> done 22/6 11h57
+
+////////////////////////////////////////////////
+TODO
+normalize sound/h function 
+D*
+
+Tesselation
+click to choose start/end
+Infinite scrolling maze{
+    probably prims algorithm -> generate the next part of the maze then append it 
+    need a way too sync the 2
+    
+    TODO
+    use global variables for timing scroll
+    fix algo not being to generate from preexisting walls
+    might have to switch from prims
+}
+

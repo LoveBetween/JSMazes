@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <title>A*</title>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="menu-container">
+        <div class="dropdown">
+            <button onclick="dropDownFunction(this)" class="dropbtn">- Maze Generation -</button>
+            <div id="myDropdown2" class="dropdown-content">
+                <button class="dropbtnchoice" onclick="genMaze(RandomizedPrims)">Randomized Prim's</a>
+                <button class="dropbtnchoice" onclick="genMaze(RandomizedKruskal)">Randomized Kruskal's</a>
+                <button class="dropbtnchoice" onclick="genMaze(RecursiveDivision)">Recursive Division</a>
+                <button class="dropbtnchoice" onclick="genMaze(RecursiveBacktracking)">Recursive Backtracking</a>
+                <button class="dropbtnchoice" onclick="genMaze(BranchingPaths)">Branching Paths</a>
+            </div>
+        </div> 
+        <div class="dropdown">
+            <button onclick="dropDownFunction(this)" class="dropbtn">- Maze Solving -</button>
+            <div id="myDropdown" class="dropdown-content">
+                <button class="dropbtnchoice" onclick="init(astar)">A*</a>
+                <button class="dropbtnchoice" onclick="init(dijkstra)">Dijkstra</a>
+                <button class="dropbtnchoice" onclick="init(bfs)">BFS</a>
+                <button class="dropbtnchoice" onclick="init(dfs)">DFS</a>
+                <button class="dropbtnchoice" onclick="init(random_walk)">Random Walk</a>
+            </div>
+        </div>
+        <button onclick="reloadPage()" class="dropbtn">- Reload -</button>
+        
+        <div class="dropdown">
+            <label for="width">width</label>
+            <input type="number" class="input-size" id="width" min="11" max="251" step="2" value="21">
+        </div>
+        
+        <div class="dropdown" >
+            <label for="height">height</label>
+            <input type="number" class="input-size" id="height" min="11" max="251" step="2" value="21">
+        </div>
+        
+        <div id="canvas-container">
+            <!--onmousedown="mouseDown(event)"--> 
+            <canvas id="myCanvas" >
+            </canvas>
+        </div>
+</span>
+    <script src="js/pathfinding.js"></script>
+</body>
+</html>
