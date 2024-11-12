@@ -22,11 +22,11 @@ var startColour = "#039dfc";
 var endColour = "#eb3434";
 var tipColour = "#c0392b";
 //////////////////////////////////////////////// miscellaneous variables
-var algo_delay = 10, maze_delay = 0, path_delay = 10;
+var algo_delay = 1, maze_delay = 1, path_delay = 10;
 var startTime, endTime;
 var max_pitch = 1.0, min_pitch = 0.1;
 var frequency_ratio = 100;
-var gain_volume = 0;//0.05
+var gain_volume = 0.05;//0.05
 
 //var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0],[1, -1], [1, 1], [-1, 1], [-1, -1]];
 //var degrees = [[1,2],[-1,2],[-1,-2],[1,-2],  [2,1],[2,-1],[-2,-1],[-2,1]]; //knight   
