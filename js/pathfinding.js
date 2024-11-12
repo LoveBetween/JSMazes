@@ -22,7 +22,7 @@ var startColour = "#039dfc";
 var endColour = "#eb3434";
 var tipColour = "#c0392b";
 //////////////////////////////////////////////// miscellaneous variables
-var algo_delay = 10, maze_delay = 1, path_delay = 10;
+var algo_delay = 10, maze_delay = 0, path_delay = 10;
 var startTime, endTime;
 var max_pitch = 1.0, min_pitch = 0.1;
 var frequency_ratio = 100;
@@ -222,7 +222,9 @@ function genMaze(maze_algo){
     cell_sizepx = 20;
     canvas.width  = width * cell_sizepx;
     canvas.height  = height * cell_sizepx;
+    // create a new empty grid
     grid = Array(width);
+    console.log(grid)
     for( let i = 0; i < width; i++){
         grid[i] = Array(height).fill(0);
     }
@@ -276,8 +278,7 @@ function checkTesselation(size){
 //////////////////////////////////////////////// Init
 function init(algo){
     if(grid==undefined)return;
-    if(grid_copy==undefined)grid_copy = deepCopy(grid);
-    grid = deepCopy(grid_copy);
+    grid_copy = deepCopy(grid);
     var start = [0,0];
     var end = [width-1, height-1];
     /*
@@ -306,9 +307,8 @@ function init(algo){
     var fmax  = width*height + Math.max(start[0], width-start[0]) **2 
                             + Math.max(start[1], height-start[1]) **2;
     display_grid(width, height);
-    fill_grid(grid);
+    fill_grid(grid_copy);
     fill_cell(start[0], start[1], startColour); //blue
     fill_cell(end[0], end[1], endColour); //red
-    var path = algo(grid, width, height, start, end, degrees);
-    
+    var path = algo(grid_copy, width, height, start, end, degrees);
 }

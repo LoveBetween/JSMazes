@@ -10,9 +10,10 @@ async function BranchingPaths(grid, width, height){
     grid[x0][y0]=0;
     let list_cell = [];
     list_cell.push([x0,y0]);
+
     while(list_cell.length>0){
         display_grid(width, height);
-            fill_grid(grid);
+        fill_grid(grid);
         let cell = list_cell.pop()
         let x = cell[0];let y = cell[1];
         directions = [[0,-1],[0,1],[1,0],[-1,0]].sort(() => Math.random() - 0.5);

@@ -23,6 +23,6 @@ Tesselation
 click to choose start/end and maze editing
 
 clean up code
-make mazes not able to be solved or generate while already generating
+make mazes not able to be solved or generate while already generating 
 add speed sliders
 change display to remove borders
