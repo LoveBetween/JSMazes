@@ -12,20 +12,17 @@ more settings -> {
 }
 reset button -> done 22/6 11h57
 
+
+
 ////////////////////////////////////////////////
 TODO
 normalize sound/h function 
 D*
 
 Tesselation
-click to choose start/end
-Infinite scrolling maze{
-    probably prims algorithm -> generate the next part of the maze then append it 
-    need a way too sync the 2
-    
-    TODO
-    use global variables for timing scroll
-    fix algo not being to generate from preexisting walls
-    might have to switch from prims
-}
+click to choose start/end and maze editing
 
+clean up code
+make mazes not able to be solved or generate while already generating
+add speed sliders
+change display to remove borders

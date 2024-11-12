@@ -38,10 +38,10 @@ const inputHeight = document.getElementById("height");
 
 function dropDownFunction(a) {
     a.parentNode.getElementsByClassName("dropdown-content")[0].classList.toggle("show");
-  }
+}
 function dropDownFunction2() {
     document.getElementById("myDropdown").classList.toggle("show");
-  }
+}
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -87,7 +87,7 @@ async function playNote2(frequency, duration) {
 
     setTimeout(
         function() {
-          oscillator.stop();
+            oscillator.stop();
         }, duration);
 }
 //////////////////////////////////////////////// display
@@ -164,413 +164,23 @@ class Node {
     }
     equals(other){
         return this.position[0] == other.position[0] &&
-               this.position[1] == other.position[1];
+                this.position[1] == other.position[1];
     }
 }
-async function astar(grid, width, height, start, end, degrees){
-    //create start and end nodes
-    let start_node = new Node(null, start);
-    let end_node = new Node(null, end);
-    // Initialize open and closed lists
-    let open_list = [];
-    let closed_list = [];
-    open_list.push(start_node);
-    //Loop untill the end is found
-    while (open_list.length > 0){
-        if(algo_delay)
-            await delay(algo_delay);
-        // Get current Node
-        
-        let current_node = open_list[0];
-        let current_index = 0;
-
-        for(let i=1; i<open_list.length; i++){
-            if(open_list[i].f < current_node.f){
-                current_node = open_list[i];
-                current_index = i;
-            }
-        }
-        // Pop current off open list, add to closed list
-        open_list.splice(current_index,1);
-        closed_list.push(current_node);
-        draw_fgh(current_node.position[0], current_node.position[1], current_node.f, current_node.g, current_node.h);
-        playNote2(current_node.f, algo_delay);
-        // Found the goal
-        if (current_node.equals(end_node)){
-            let path = [];
-            let current = current_node;
-            while (current != null){
-                path.push(current.position);
-                current = current.parent;
-            }
-            draw_path(path, pathColour);
-            return path;
-        }
-        //generate children
-        let children = []
-
-        for(let i =0; i<degrees.length; i++){
-            let node_position = [current_node.position[0] + degrees[i][0], current_node.position[1] + degrees[i][1]];
-            //Make sure within range
-            if (node_position[0] > width -1 || node_position[0] < 0 || node_position[1] > height -1 || node_position[1] < 0)
-                continue;
-            //Make sure walkable terrain
-            if (grid[node_position[0]][node_position[1]] != 0)
-                continue;
-            //Create new node
-            let new_node = new Node(current_node, node_position);
-            //Append
-            children.push(new_node);
-        }
-        //Loop through children
-        outer : for(let i =0; i<children.length; i++){
-            let child = children[i];
-            //Child is on the closed list
-            for(let j =0; j<closed_list.length; j++){
-                if (child.equals(closed_list[j]))
-                    continue outer;
-            }  
-            //Create the f, g, and h values
-            child.g = current_node.g + 1;
-            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2);
-            child.f = child.g + child.h;
-
-            //Child is already in the open list
-            for(let j =0; j<open_list.length; j++){
-                if (child.equals(open_list[j]) && child.g > open_list[j].g)
-                    continue outer;
-            }
-            //Add the child to the open list
-            open_list.push(child);
-        }
-    }
-    console.log("didn't find path");
-}
-
-async function dijkstra(grid, width, height, start, end, degrees){
-
-    //create start and end nodes
-    let start_node = new Node(null, start);
-    let end_node = new Node(null, end);
-
-    // Initialize open and closed lists
-    let open_list = [];
-    let closed_list = [];
-
-    open_list.push(start_node);
-
-    //Loop untill the end is found
-
-    while (open_list.length > 0){
-        if(algo_delay)
-            await delay(algo_delay);
-        // Get current Node
-        
-        let current_node = open_list[0];
-        
-        let current_index = 0;
-
-        for(let i=1; i<open_list.length; i++){
-            if(open_list[i].f < current_node.f){
-                current_node = open_list[i];
-                current_index = i;
-            }
-        }
-        // Pop current off open list, add to closed list
-        open_list.splice(current_index,1);
-        closed_list.push(current_node);
-        draw_fgh(current_node.position[0], current_node.position[1], current_node.f, current_node.g, current_node.h);
-        playNote2(current_node.f, algo_delay);
-        // Found the goal
-        if (current_node.equals(end_node)){
-            let path = [];
-            let current = current_node;
-            while (current != null){
-                path.push(current.position);
-                current = current.parent;
-            }
-            draw_path(path, pathColour);
-            return path;
-        }
-        //generate children
-        let children = []
-        
-        for(let i =0; i<degrees.length; i++){
-            let node_position = [current_node.position[0] + degrees[i][0], current_node.position[1] + degrees[i][1]];
-            //Make sure within range
-            //console.log([node_position[0], node_position[1]]); 
-            if (node_position[0] > width -1 || node_position[0] < 0 || node_position[1] > height -1 || node_position[1] < 0)
-                continue;
-            //Make sure walkable terrain
-            if (grid[node_position[0]][node_position[1]] != 0)
-                continue;
-
-            //Create new node
-            grid[node_position[0]][node_position[1]] = 2;
-            let new_node = new Node(current_node, node_position);
-            
-            //Append
-            children.push(new_node);
-        }
-        //Loop through children
-        outer : for(let i =0; i<children.length; i++){
-            let child = children[i];
-
-            //Child is on the closed list
-            for(let j =0; j<closed_list.length; j++){
-                if (child.equals(closed_list[j]))
-                    continue outer;
-            }
-            //Create the f value
-            child.f = current_node.f + 1;
-
-            //Child is already in the open list
-            for(let j =0; j<open_list.length; j++){
-                if (child.equals(open_list[j]) && child.g > open_list[j].g)
-                    continue outer;
-            }
-
-            //Add the child to the open list
-            open_list.push(child);
-        }
-    }
-    console.log("didn't find path");
-}
-
-//  positions heatmap todo
-async function random_walk(grid, width, height, start, end, degrees){
-    let path = [];
-    let current_pos = start;
-    while(current_pos!=end){
-        //choose a direction
-        let index = Math.floor(Math.random() * degrees.length);
-        let new_pos = [current_pos[0] + degrees[index][0], current_pos[1] + degrees[index][1]];
-        //Make sure within range
-        if (new_pos[0] > width -1 || new_pos[0] < 0 || new_pos[1] > height -1 || new_pos[1] < 0)
-            continue;
-        //Make sure walkable terrain
-        if (grid[new_pos[0]][new_pos[1]] != 0)
-            continue;
-        // even 0 delay is necessary here or the random walk will use all the ressources
-        await delay(algo_delay);//delay only if the random tile is acceptable
-        
-        //test for ending
-        if(new_pos[0]==end[0] && new_pos[1]==end[1]){
-            return path;
-        }
-        if(!(new_pos[0]==start[0] && new_pos[1]==start[1])){
-            fill_cell(new_pos[0], new_pos[1], pathColour);
-        }
-        if(!(current_pos[0]==start[0] && current_pos[1]==start[1])){
-            fill_cell(current_pos[0], current_pos[1], bgColour);
-        }
-        let h = ((new_pos[0] - end[0]) ** 2) + ((new_pos[1] - end[1]) ** 2);
-        playNote2(h*10, algo_delay);
-        current_pos = new_pos;
-    }
-}
-// Doesn't work yet
-async function random_movement_memory(grid, width, height, start, end, degrees){
-    let path = [];
-    let current_pos = start;
-    while(current_pos!=end){
-        
-        //choose a direction
-        let index = Math.floor(Math.random() * degrees.length);
-        let new_pos = [current_pos[0] + degrees[index][0], current_pos[1] + degrees[index][1]];
-        //Make sure within range
-        if (new_pos[0] > width -1 || new_pos[0] < 0 || new_pos[1] > height -1 || new_pos[1] < 0)
-            continue;
-        //Make sure walkable terrain
-        if (grid[new_pos[0]][new_pos[1]] != 0)
-            continue;
-            
-        await delay(algo_delay);
-        
-        //test for ending
-        if(new_pos[0]==end[0] && new_pos[1]==end[1]){
-            return path;
-        }
-        if(!(current_pos[0]==start[0] && current_pos[1]==start[1]))
-            grid[new_pos[0]][new_pos[1]]=2;
-            fill_cell(new_pos[0], new_pos[1], pathColour);
-            fill_cell(current_pos[0], current_pos[1], bgColour);
-        current_pos = new_pos;
-    }
-}
-
-async function bfs(grid, width, height, start, end, degrees){
-    const hmax = ((start[0] - end[0]) ** 2) + ((start[1] - end[1]) ** 2);
-//create start and end nodes
-    let start_node = new Node(null, start);
-    let end_node = new Node(null, end);
-// Initialize open and closed lists
-    let open_list = [];
-    let closed_list = [];
-    open_list.push(start_node);
-//Loop untill the end is found
-    while (open_list.length > 0){
-        if(algo_delay)
-            await delay(algo_delay);
-// Get current Node
-        let current_node = open_list[0];
-        let current_index = 0;
-// Pop current off open list, add to closed list
-        open_list.splice(current_index,1);
-        closed_list.push(current_node);
-// Found the goal
-        if (current_node.equals(end_node)){
-            let path = [];
-            let current = current_node;
-            while (current != null){
-                path.push(current.position);
-                current = current.parent;
-            }
-            draw_path(path, pathColour);
-            return path;
-        }
-
-// generate children
-        let children = []
-        
-        for(let i =0; i<degrees.length; i++){
-            let node_position = [current_node.position[0] + degrees[i][0], current_node.position[1] + degrees[i][1]];
-//Make sure within range
-            if (node_position[0] > width -1 || node_position[0] < 0 || node_position[1] > height -1 || node_position[1] < 0)
-                continue;
-//Make sure walkable terrain
-            if (grid[node_position[0]][node_position[1]] != 0)
-                continue;
-            grid[node_position[0]][node_position[1]] = 2;
-            
-// play sound and draw visited nodes and 
-            let h = ((node_position[0] - end[0]) ** 2) + ((node_position[1] - end[1]) ** 2);
-            playNote2(h, algo_delay);
-            if(!(node_position[0]==start[0] && node_position[1]==start[1]) && !(node_position[0]==end[0] && node_position[1]==end[1]));
-                fill_cell(node_position[0], node_position[1], gradientColour(h, 0, hmax, pathColour1, pathColour2));
-//Create new node
-            let new_node = new Node(current_node, node_position);
-//Append
-            children.push(new_node);
-        }
-//Loop through children
-        outer : for(let i =0; i<children.length; i++){
-            let child = children[i];
-
-//Child is on the closed list
-            for(let j =0; j<closed_list.length; j++){
-                if (child.equals(closed_list[j]))
-                    continue outer;
-            }
-
-//Child is already in the open list
-            for(let j =0; j<open_list.length; j++){
-                if (child.equals(open_list[j]))
-                    continue outer;
-            }
-
-//Add the child to the open list
-            open_list.push(child);
-        }
-    }
-    console.log("didn't find path");
-}
-
-async function dfs(grid, width, height, start, end, degrees){
-    const hmax = ((start[0] - end[0]) ** 2) + ((start[1] - end[1]) ** 2);
-    //create start and end nodes
-    let start_node = new Node(null, start);
-    let end_node = new Node(null, end);
-
-    // Initialize open and closed lists
-    let open_list = [];
-    let closed_list = [];
-
-    open_list.push(start_node);
-
-    //Loop untill the end is found
-
-    while (open_list.length > 0){
-        if(algo_delay)
-            await delay(algo_delay);
-
-        // Pop current off open list, add to closed list
-        let current_node = open_list.pop();
-        closed_list.push(current_node);
-        
-        // Found the goal
-        if (current_node.equals(end_node)){
-            let path = [];
-            let current = current_node;
-            while (current != null){
-                path.push(current);
-                current = current.parent;
-            }
-            draw_path_animation(path, pathColour);
-            return path;
-        }
-        //generate children
-        let children = []
-        
-        for(let i =0; i<degrees.length; i++){
-            let node_position = [current_node.position[0] + degrees[i][0], current_node.position[1] + degrees[i][1]];
-            //Make sure within range
-            if (node_position[0] > width -1 || node_position[0] < 0 || node_position[1] > height -1 || node_position[1] < 0)
-                continue;
-            //Make sure walkable terrain
-            if (grid[node_position[0]][node_position[1]] != 0)
-                continue;
-            grid[node_position[0]][node_position[1]] = 2;
-            // play sound and draw visited nodes and 
-            let h = ((node_position[0] - end[0]) ** 2) + ((node_position[1] - end[1]) ** 2);
-            current_node.h = h;
-            playNote2(h, algo_delay);
-            if(!(node_position[0]==start[0] && node_position[1]==start[1]) && !(node_position[0]==end[0] && node_position[1]==end[1]))
-                //fill_cell(node_position[0], node_position[1], visitedColour);
-                fill_cell(node_position[0], node_position[1], 
-                    gradientColour(h, 0, hmax, pathColour1, pathColour2));
-            //Create new node
-            let new_node = new Node(current_node, node_position);
-
-            //Append
-            children.push(new_node);
-        }
-        //Loop through children
-        outer : for(let i =0; i<children.length; i++){
-            let child = children[i];
-
-            //Child is on the closed list
-            for(let j =0; j<closed_list.length; j++){
-                if (child.equals(closed_list[j]))
-                    continue outer;
-            }
-
-            //Child is already in the open list
-            for(let j =0; j<open_list.length; j++){
-                if (child.equals(open_list[j]))
-                    continue outer;
-            }
-
-            //Add the child to the open list
-            open_list.push(child);
-        }
-    }
-    console.log("didn't find path");
-}
-//////////////////////////////////////////////// maze generation algorithms
+//////////////////////////////////////////////// maze generation functions
 
 let deepCopy = (arr) => {
     let copy = [];
     arr.forEach(elem => {
-      if(Array.isArray(elem)){
-        copy.push(deepCopy(elem))
-      }else{
-        if (typeof elem === 'object') {
-          copy.push(deepCopyObject(elem))
-      } else {
-          copy.push(elem)
+        if(Array.isArray(elem)){
+            copy.push(deepCopy(elem))
+        }else{
+            if (typeof elem === 'object') {
+                copy.push(deepCopyObject(elem))
+            } else {
+                copy.push(elem)
+            }
         }
-      }
     })
     return copy;
 }
@@ -586,90 +196,6 @@ function create_maze(grid, border = false){
         }
     }
 }
-async function RecursiveDivision(grid, width, height){
-    startTimer();
-    display_grid(width, height);
-    let chambers = [[0,0,width-1,height-1]];
-    while(chambers.length>0){
-        let ch = chambers.pop();
-
-        let x1 = ch[0], y1=ch[1], x2=ch[2],y2=ch[3];
-        //generate walls
-        let x = randInt(x1+1, x2-1);
-        let y = randInt(y1+1, y2-1);
-        for(let j =y1;j<y2+1;j++){
-            grid[x][j] = 1;
-            fill_cell(x,j,wallColour);
-        }
-        for(let i =x1;i<x2+1;i++){
-            grid[i][y] = 1;
-            fill_cell(i,y,wallColour);
-        }
-        //remove hole blocking
-        {
-            if(y1>0)if(grid[x][y1-1]==-1){
-                grid[x][y1]=0;
-                fill_cell(x,y1,bgColour);
-            }
-            if(y2<height-1)if(grid[x][y2+1]==-1){
-                grid[x][y2]=0;
-                fill_cell(i,y2,bgColour);
-            }
-            if(x1>0)if(grid[x1-1][y]==-1){
-                grid[x1][y]=0;
-                fill_cell(x1,y,bgColour);
-            }
-            if(x2<width-1)if(grid[x2+1][y]==-1){
-                grid[x2][y]=0;
-                fill_cell(x2,y,bgColour);
-            }
-        }
-        //make holes
-        let notawall = randInt(0,3);
-        {
-            if(notawall!=0){
-                let r = randInt(y1, y-1);
-                grid[x][r] = -1;
-                fill_cell(x,r,bgColour);
-            }
-            if(notawall!=1){
-                let r = randInt(y+1, y2);
-                grid[x][r] = -1;
-                fill_cell(x,r,bgColour);
-            }
-            if(notawall!=2){
-                let r = randInt(x1, x-1);
-                grid[r][y] = -1;
-                fill_cell(r,y,bgColour);
-            }
-            if(notawall!=3){
-                let r = randInt(x+1, x2);
-                grid[r][y] = -1;
-                fill_cell(r,y,bgColour);
-            }
-        }
-        //add new chambers
-        if(x-1-x1>2){
-            if(y-1-y1>2)
-                chambers.push([x1,y1, x-1, y-1]);
-            if(y2-(y+1)>2)
-                chambers.push([x1,y+1, x-1, y2]);
-        }  
-        if(x2-(x+1)>2){
-            if(y-1-y1>2)
-                chambers.push([x+1,y1, x2, y-1]);
-            if(y2-(y+1)>2)
-                chambers.push([x+1,y+1, x2, y2]);
-        }        
-        
-        if(maze_delay)
-            await delay(maze_delay);
-    }
-    for(let i=0;i<width;i++){
-        for(let j=0;j<width;j++)if(grid[i][j]==-1)grid[i][j]=0;
-    }
-    endTimer("RecursiveDivision");
-}
 
 class Set {
     constructor(index, pos){
@@ -679,209 +205,6 @@ class Set {
     fuse(set){
         this.ar = this.ar.concat(set.ar);
     }
-}
-
-async function RandomizedKruskal(grid, width, height){
-    startTimer();
-    display_grid(width, height);
-    //array and set setup
-    let gridSet = Array(width);
-    for( let i = 0; i < width; i++){
-        gridSet[i] = Array(height);
-    }
-    let list_set = [];
-    let list_wall = [];
-    for(let i=0;i<width;i++){
-        for(let j=0;j<height;j++){
-            grid[i][j]=1;
-            if((i%2==1 ||(i%2==0 && j%2==1))){
-                list_wall.push([i,j]);
-                fill_cell(i,j,pathColour);
-            }
-            else{
-                list_set.push(new Set(width*i+j, [i,j]));
-                gridSet[i][j]=i*width+j;
-            }
-        }
-    }
-    
-    while(list_set.length>1){
-        const r = randInt(0, list_wall.length-1);
-        let wall = list_wall[r];
-        //get the cell coordinates
-        let x1=wall[0], x2=wall[0], y1=wall[1], y2=wall[1];
-        if(randInt(0,2)==1){x1--;x2++;}
-        else{y1--;y2++;}
-        // skip iteration if cells are out of bounds or arent from same set
-        if(x1<0 || y1<0 || x2>=width  || y2>=height )
-            continue;
-        if(gridSet[x1][y1] == gridSet[x2][y2])
-            continue;
-        list_wall.splice(r,1);
-        //update grid 
-        grid[x1][y1]=0;grid[x2][y2]=0;grid[wall[0]][wall[1]]=0;
-        //propagonate
-        const i1 = gridSet[x1][y1];
-        const i2 = gridSet[x2][y2];
-        let iset1, iset2;
-        for(let i=0;i<list_set.length;i++){
-            if(i1==list_set[i].index)iset1=i;
-            if(i2==list_set[i].index)iset2=i;
-        }
-        let index = list_set[iset1].index;
-        //update gridset
-        list_set[iset2].ar.forEach(a => gridSet[a[0]][a[1]] = index);
-        //pop and fuse
-        list_set[iset1].fuse(list_set[iset2]);
-        list_set.splice(iset2,1);
-        fill_cell(wall[0],wall[1],bgColour);
-        if (maze_delay)
-            await delay(maze_delay);
-    }
-    endTimer("RandomizedKruskal");
-}
-
-async function RandomizedPrims(grid, width, height){
-    if(width%2==0 || height%2==0){
-        evenNumberAlert();
-        return;
-    }
-    
-    startTimer();
-    for(let i=0;i<width;i++)
-        for(let j=0;j<height;j++)
-            grid[i][j]=1;
-    display_grid(width,height);
-    fill_grid(grid);
-    //get a random cell
-    let x = Math.floor(randInt(0, width)/2)*2;
-    let y = Math.floor(randInt(0, height)/2)*2;
-    grid[x][y] = 0;
-    let list_wall = [[x+1,y],[x-1,y],[x,y+1],[x,y-1]];
-    fill_cell(x,y,bgColour);
-    while(list_wall.length>0){
-        let r = randInt(0, list_wall.length);
-        x = list_wall[r][0]; 
-        y = list_wall[r][1];
-        list_wall.splice(r,1);
-        
-        if(x<0 || x>=width || y<0 || y>=height)
-            continue;
-        if(x%2==1){
-            if(grid[x+1][y]==0 ^ grid[x-1][y]==0 ){
-                grid[x][y]=0;
-                if(grid[x+1][y]==0){
-                    grid[x-1][y]=0;
-                    fill_cell(x,y,bgColour);
-                    x--;
-                    fill_cell(x,y,bgColour);
-                    list_wall.push([x-1,y],[x,y+1],[x,y-1]);
-                }
-                else{
-                    grid[x+1][y]=0;
-                    fill_cell(x,y,bgColour);
-                    x++;
-                    fill_cell(x,y,bgColour);
-                    list_wall.push([x+1,y],[x,y+1],[x,y-1]);
-                }
-            }
-        }
-        else if(grid[x][y+1]==0^grid[x][y-1]==0){
-            grid[x][y]=0;
-            if(grid[x][y+1]==0){
-                grid[x][y-1]=0;
-                fill_cell(x,y,bgColour);
-                y--;
-                fill_cell(x,y,bgColour);
-                list_wall.push([x+1,y],[x-1,y],[x,y-1]);
-            }
-            else{
-                grid[x][y+1]=0;
-                fill_cell(x,y,bgColour);
-                y++;
-                fill_cell(x,y,bgColour);
-                list_wall.push([x+1,y],[x-1,y],[x,y+1]);
-            }
-        }
-        if (maze_delay)
-            await delay(maze_delay);
-    }
-    endTimer("RandomizedPrims");
-}
-
-async function RecursiveBacktracking(grid, width, height){
-    startTimer();
-    let dir_permutations = permutations([[0,-1],[0,1],[1,0],[-1,0]]);
-    for(let i=0;i<width;i++)
-        for(let j=0;j<height;j++)
-            grid[i][j]=1;
-    grid[0][0]=0;
-    display_grid(width, height);
-    fill_grid(grid);
-    let list_cell = [];
-    if(randInt(0,2))
-        list_cell.push([2,0,[1,0]]);
-    else list_cell.push([0,2,[0,1]]);
-    while(list_cell.length>0){
-
-        let cell = list_cell.pop()
-        let x = cell[0];let y = cell[1];let b_dir = cell[2];
-        if(grid[x][y]==0)continue;
-
-        grid[x][y]=0;
-        grid[x-b_dir[0]][y-b_dir[1]]=0;
-        grid[x-b_dir[0]*2][y-b_dir[1]*2]=0;
-        fill_cell(x,y,bgColour);
-        fill_cell(x-b_dir[0],y-b_dir[1],bgColour);
-        fill_cell(x-b_dir[0]*2,y-b_dir[1]*2,bgColour);
-
-        let directions = dir_permutations[randInt(0,24)];
-        let counter = 0;
-        directions.forEach(dir => {
-            counter++;
-            let nx =  x+2*dir[0]; let ny = y+2*dir[1];
-            if(nx>=0 && nx<width && ny>=0 && ny<height && grid[nx][ny]==1){
-                list_cell.push([nx, ny, dir]);
-            }
-        });
-        if (counter && maze_delay)
-            await delay(maze_delay);
-    }
-    endTimer("(iterative))RecursiveBacktracking");
-}
-//Random walk that branches at each intersection
-async function BranchingPaths(grid, width, height){
-    startTimer();
-    for(let i=0;i<width;i++)
-        for(let j=0;j<height;j++)
-            grid[i][j]=1;
-    let x0 = randInt(0,width);
-    let y0 = randInt(0, height);
-    x0 -= x0%2;y0-=y0%2;
-    grid[x0][y0]=0;
-    let list_cell = [];
-    list_cell.push([x0,y0]);
-    while(list_cell.length>0){
-        display_grid(width, height);
-            fill_grid(grid);
-        let cell = list_cell.pop()
-        let x = cell[0];let y = cell[1];
-        directions = [[0,-1],[0,1],[1,0],[-1,0]].sort(() => Math.random() - 0.5);
-        let counter = 0;
-        directions.forEach(dir => {
-            let nx =  x+2*dir[0]; let ny = y+2*dir[1];
-            if(nx>=0 && nx<width && ny>=0 && ny<height && grid[nx][ny]==1){
-                counter++;
-                grid[x][y]=0;
-                grid[nx][ny]=0;
-                grid[nx-dir[0]][ny-dir[1]]=0; 
-                list_cell.push([nx, ny]);
-            }
-        });
-        if (maze_delay && counter)
-            await delay(maze_delay);
-    }
-    endTimer("Branching Paths");
 }
 
 async function Tesselation(grid, width, height){
@@ -909,24 +232,24 @@ function genMaze(maze_algo){
 //////////////////////////////////////////////// miscellaneous functions
 
 function startTimer() {
-  startTime = new Date();
+    startTime = new Date();
 }
 function endTimer(s) {
-  endTime = new Date();
-  console.log(s +" : " +(endTime - startTime) + " ms");
+    endTime = new Date();
+    console.log(s +" : " +(endTime - startTime) + " ms");
 }
 function randInt(min, max) {
     return Math.floor(Math.random() * (max-min)+min);
 }
 function shuffleArray(array){
     for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
     return array;
-  }
+}
 function delay(milliseconds){
     return new Promise(resolve => {
         setTimeout(resolve, milliseconds);
@@ -935,16 +258,16 @@ function delay(milliseconds){
 const permutations = arr => {
     if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : arr;
     return arr.reduce(
-      (acc, item, i) =>
+        (acc, item, i) =>
         acc.concat(
-          permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [
+            permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [
             item,
             ...val,
-          ])
+            ])
         ),
-      []
+        []
     );
-  };
+};
 function checkTesselation(size){
     if(size==5)return true;
     if(size<5)return false;
@@ -989,9 +312,3 @@ function init(algo){
     var path = algo(grid, width, height, start, end, degrees);
     
 }
-//////////////////////////////////////////////// Infinite maze
-
-function infinite_setup(){
-
-}
-function infinite_update(){}
