@@ -14,8 +14,13 @@ async function BranchingPaths(grid, width, height){
     while(list_cell.length>0){
         display_grid(width, height);
         fill_grid(grid);
-        let cell = list_cell.pop()
+        let cell = list_cell.pop();
         let x = cell[0];let y = cell[1];
+
+        // sound
+        let h = ((x - width) ** 2) + ((y - height) ** 2);
+        playNote2(h, algo_delay);
+
         directions = [[0,-1],[0,1],[1,0],[-1,0]].sort(() => Math.random() - 0.5);
         let counter = 0;
         directions.forEach(dir => {

@@ -23,6 +23,9 @@ async function RecursiveBacktracking(grid, width, height){
         fill_cell(x,y,bgColour);
         fill_cell(x-b_dir[0],y-b_dir[1],bgColour);
         fill_cell(x-b_dir[0]*2,y-b_dir[1]*2,bgColour);
+        // play note
+        let h = ((x - width) ** 2) + ((y - height) ** 2);
+        playNote2(h, algo_delay);
 
         let directions = dir_permutations[randInt(0,24)];
         let counter = 0;

@@ -32,6 +32,9 @@ async function RandomizedPrims(grid, width, height){
                     fill_cell(x,y,bgColour);
                     x--;
                     fill_cell(x,y,bgColour);
+                    // play note
+                    let h = ((x - width) ** 2) + ((y - height) ** 2);
+                    playNote2(h, algo_delay);
                     list_wall.push([x-1,y],[x,y+1],[x,y-1]);
                 }
                 else{
@@ -39,6 +42,9 @@ async function RandomizedPrims(grid, width, height){
                     fill_cell(x,y,bgColour);
                     x++;
                     fill_cell(x,y,bgColour);
+                    // play note
+                    let h = ((x - width) ** 2) + ((y - height) ** 2);
+                    playNote2(h, algo_delay);
                     list_wall.push([x+1,y],[x,y+1],[x,y-1]);
                 }
             }
@@ -50,6 +56,9 @@ async function RandomizedPrims(grid, width, height){
                 fill_cell(x,y,bgColour);
                 y--;
                 fill_cell(x,y,bgColour);
+                // play note
+                let h = ((x - width) ** 2) + ((y - height) ** 2);
+                playNote2(h, algo_delay);
                 list_wall.push([x+1,y],[x-1,y],[x,y-1]);
             }
             else{
@@ -57,6 +66,9 @@ async function RandomizedPrims(grid, width, height){
                 fill_cell(x,y,bgColour);
                 y++;
                 fill_cell(x,y,bgColour);
+                // play note
+                let h = ((x - width) ** 2) + ((y - height) ** 2);
+                playNote2(h, algo_delay);
                 list_wall.push([x+1,y],[x-1,y],[x,y+1]);
             }
         }

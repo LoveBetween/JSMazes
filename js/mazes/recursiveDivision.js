@@ -9,6 +9,10 @@ async function RecursiveDivision(grid, width, height){
         //generate walls
         let x = randInt(x1+1, x2-1);
         let y = randInt(y1+1, y2-1);
+        // play note
+        let h = ((x - width) ** 2) + ((y - height) ** 2);
+        playNote2(h, algo_delay);
+
         for(let j =y1;j<y2+1;j++){
             grid[x][j] = 1;
             fill_cell(x,j,wallColour);

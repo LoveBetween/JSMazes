@@ -13,6 +13,8 @@ var maze_generation = false;
 var bgColour = "#000000";
 var gridColour = "#FFFFFF";
 var wallColour = "#888888";
+var highLightedColor = "#FF0000"
+
 var visitedColour = "#FFFFFF";
 var textColour = "#FFFFFF";
 var pathColour = "#37eb34";
@@ -22,7 +24,7 @@ var startColour = "#039dfc";
 var endColour = "#eb3434";
 var tipColour = "#c0392b";
 //////////////////////////////////////////////// miscellaneous variables
-var algo_delay = 1, maze_delay = 1, path_delay = 10;
+var algo_delay = 20, maze_delay = 50, path_delay = 20;
 var startTime, endTime;
 var max_pitch = 1.0, min_pitch = 0.1;
 var frequency_ratio = 100;

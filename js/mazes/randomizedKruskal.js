@@ -52,6 +52,10 @@ async function RandomizedKruskal(grid, width, height){
         list_set[iset1].fuse(list_set[iset2]);
         list_set.splice(iset2,1);
         fill_cell(wall[0],wall[1],bgColour);
+        // play note
+        let h = ((wall[0] - width) ** 2) + ((wall[1] - height) ** 2);
+        playNote2(h, algo_delay);
+
         if (maze_delay)
             await delay(maze_delay);
     }
