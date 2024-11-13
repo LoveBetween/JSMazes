@@ -30,19 +30,26 @@
         </div>
         <button onclick="reloadPage()" class="dropbtn">- Reload -</button>
         
-        <div class="dropdown">
-            <label for="width">width</label>
+        <div>
+            <label for="width">WIDTH</label>
             <input type="number" class="input-size" id="width" min="11" max="251" step="2" value="21">
         </div>
         
-        <div class="dropdown" >
-            <label for="height">height</label>
+        <div>
+            <label for="height">HEIGHT</label>
             <input type="number" class="input-size" id="height" min="11" max="251" step="2" value="21">
         </div>
 
         <div >
             <label for="volume">VOLUME</label>
-            <input type="range" id="volume" min="0" max="20" step="1" value="5">
+            <input type="range" class="volume" id="volume" min="0" max="20" step="1" value="5">
+        </div>
+        <div>
+            <label for="border">BORDER</label>
+            <label class="switch">
+                <input type="checkbox" id="border">
+                <span class="slider"> </span>
+            </label>
         </div>
         
         <div id="canvas-container">

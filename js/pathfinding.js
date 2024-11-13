@@ -29,6 +29,7 @@ var startTime, endTime;
 var max_pitch = 1.0, min_pitch = 0.1;
 var frequency_ratio = 100;
 var gain_volume = 0.05;
+var display_border = false
 
 //var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0],[1, -1], [1, 1], [-1, 1], [-1, -1]];
 //var degrees = [[1,2],[-1,2],[-1,-2],[1,-2],  [2,1],[2,-1],[-2,-1],[-2,1]]; //knight   
@@ -37,7 +38,8 @@ var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0] ];//4 degrees
 
 const inputWidth = document.getElementById("width");
 const inputHeight = document.getElementById("height");
-document.getElementById("volume").addEventListener("change", e => gain_volume = e.target.value/100)
+document.getElementById("volume").addEventListener("change", e => gain_volume = e.target.value/100);
+document.getElementById("border").addEventListener("change", e => display_border = e.target.checked);
 
 function dropDownFunction(a) {
     a.parentNode.getElementsByClassName("dropdown-content")[0].classList.toggle("show");
@@ -95,31 +97,47 @@ async function playNote2(frequency, duration) {
 }
 //////////////////////////////////////////////// display
 function display_grid(width, height) {
-    ctx.beginPath();
-    ctx.rect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = bgColour;
-    ctx.fill();
-    ctx.closePath();
+    if (display_border){
+        ctx.beginPath();
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = bgColour;
+        ctx.fill();
+        ctx.closePath();
 
-    ctx.beginPath();
-    ctx.strokeStyle = gridColour;
-    for (i = 0; i <= width; i++) {
-        ctx.moveTo(i * cell_sizepx, 0);
-        ctx.lineTo(i * cell_sizepx, height * cell_sizepx);
-        ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = gridColour;
+        for (i = 0; i <= width; i++) {
+            ctx.moveTo(i * cell_sizepx, 0);
+            ctx.lineTo(i * cell_sizepx, height * cell_sizepx);
+            ctx.stroke();
+        }
+        for (i = 0; i <= height; i++) {
+            ctx.moveTo(0, i * cell_sizepx);
+            ctx.lineTo(width * cell_sizepx, i * cell_sizepx);
+            ctx.stroke();
+        }
     }
-    for (i = 0; i <= height; i++) {
-        ctx.moveTo(0, i * cell_sizepx);
-        ctx.lineTo(width * cell_sizepx, i * cell_sizepx);
-        ctx.stroke();
+    else {
+        ctx.beginPath();
+        ctx.rect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = bgColour;
+        ctx.fill();
+        ctx.closePath();
     }
 }
 function fill_cell(x,y, colour){
+    
     ctx.beginPath();
-    ctx.rect(x * cell_sizepx+1 , y * cell_sizepx+1, cell_sizepx-2, cell_sizepx-2);
+    if (display_border){
+        ctx.rect(x * cell_sizepx+1 , y * cell_sizepx+1, cell_sizepx-2, cell_sizepx-2);
+    }
+    else {
+        ctx.rect(x * cell_sizepx , y * cell_sizepx, cell_sizepx, cell_sizepx);
+    }
     ctx.fillStyle = colour;
     ctx.fill();
     ctx.closePath();
+    
 }
 function draw_fgh(x,y,f,g,h){
     ctx.fillStyle = textColour;
