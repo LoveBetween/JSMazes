@@ -22,10 +22,10 @@ async function bfs(grid, width, height, start, end, degrees){
             let path = [];
             let current = current_node;
             while (current != null){
-                path.push(current.position);
-                current = current.parent;
+                path.push(current);
+                current = current.parent; 
             }
-            draw_path(path, pathColour);
+            draw_path_animation(path, pathColour);
             return path;
         }
 
@@ -44,6 +44,7 @@ async function bfs(grid, width, height, start, end, degrees){
             
 // play sound and draw visited nodes and 
             let h = ((node_position[0] - end[0]) ** 2) + ((node_position[1] - end[1]) ** 2);
+            current_node.h = h
             playNote2(h, algo_delay);
             if(!(node_position[0]==start[0] && node_position[1]==start[1]) && !(node_position[0]==end[0] && node_position[1]==end[1]));
                 fill_cell(node_position[0], node_position[1], gradientColour(h, 0, hmax, pathColour1, pathColour2));

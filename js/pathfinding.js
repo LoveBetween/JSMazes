@@ -26,7 +26,7 @@ var algo_delay = 1, maze_delay = 1, path_delay = 10;
 var startTime, endTime;
 var max_pitch = 1.0, min_pitch = 0.1;
 var frequency_ratio = 100;
-var gain_volume = 0.05;//0.05
+var gain_volume = 0.05;
 
 //var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0],[1, -1], [1, 1], [-1, 1], [-1, -1]];
 //var degrees = [[1,2],[-1,2],[-1,-2],[1,-2],  [2,1],[2,-1],[-2,-1],[-2,1]]; //knight   
@@ -35,6 +35,7 @@ var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0] ];//4 degrees
 
 const inputWidth = document.getElementById("width");
 const inputHeight = document.getElementById("height");
+document.getElementById("volume").addEventListener("change", e => gain_volume = e.target.value/100)
 
 function dropDownFunction(a) {
     a.parentNode.getElementsByClassName("dropdown-content")[0].classList.toggle("show");
@@ -218,13 +219,13 @@ async function Tesselation(grid, width, height){
 function genMaze(maze_algo){
     width = parseInt(inputWidth.value);
     height = parseInt(inputHeight.value);
+
     maze_generation = true;
     cell_sizepx = 20;
     canvas.width  = width * cell_sizepx;
     canvas.height  = height * cell_sizepx;
     // create a new empty grid
     grid = Array(width);
-    console.log(grid)
     for( let i = 0; i < width; i++){
         grid[i] = Array(height).fill(0);
     }

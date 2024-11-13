@@ -37,10 +37,11 @@ async function dijkstra(grid, width, height, start, end, degrees){
             let path = [];
             let current = current_node;
             while (current != null){
-                path.push(current.position);
+                path.push(current);
                 current = current.parent;
+
             }
-            draw_path(path, pathColour);
+            draw_path_animation(path, pathColour);
             return path;
         }
         //generate children
@@ -74,6 +75,7 @@ async function dijkstra(grid, width, height, start, end, degrees){
             }
             //Create the f value
             child.f = current_node.f + 1;
+            child.h = child.f
 
             //Child is already in the open list
             for(let j =0; j<open_list.length; j++){

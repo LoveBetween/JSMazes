@@ -31,10 +31,10 @@ async function astar(grid, width, height, start, end, degrees){
             let path = [];
             let current = current_node;
             while (current != null){
-                path.push(current.position);
+                path.push(current);
                 current = current.parent;
             }
-            draw_path(path, pathColour);
+            draw_path_animation(path, pathColour);
             return path;
         }
         //generate children
