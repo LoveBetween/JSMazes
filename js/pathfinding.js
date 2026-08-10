@@ -35,7 +35,7 @@ var display_border = false
 
 //var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0],[1, -1], [1, 1], [-1, 1], [-1, -1]];
 //var degrees = [[1,2],[-1,2],[-1,-2],[1,-2],  [2,1],[2,-1],[-2,-1],[-2,1]]; //knight   
-var degrees = [ [0, -1], [0, 1], [-1, 0], [1, 0] ];//4 degrees
+var degrees = [ [0, -1], [-1, 0], [0, 1], [1, 0] ];//4 degrees
 //////////////////////////////////////////////// menu
 
 const inputWidth = document.getElementById("width");
