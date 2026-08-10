@@ -41,7 +41,7 @@ async function dijkstra(grid, width, height, start, end, degrees){
                 current = current.parent;
 
             }
-            draw_path_animation(path, pathColour);
+            
             return path;
         }
         //generate children

@@ -33,9 +33,6 @@
         <div>
             <label for="width">WIDTH</label>
             <input type="number" class="input-size" id="width" min="11" max="251" step="2" value="21">
-        </div>
-        
-        <div>
             <label for="height">HEIGHT</label>
             <input type="number" class="input-size" id="height" min="11" max="251" step="2" value="21">
         </div>
@@ -50,6 +47,12 @@
                 <input type="checkbox" id="border">
                 <span class="slider"> </span>
             </label>
+        </div>
+        <div>
+            <label for="delay">DELAY : </label> maze creation delay 
+            <input type="number" class="maze_delay" id="maze_delay" min="0" max="1000" step="1" value="50"> ms | solving delay</input>
+            <input type="number" class="algo_delay" id="algo_delay" min="0" max="1000" step="1" value="20"> ms | path delay</input>
+            <input type="number" class="path_delay" id="path_delay" min="0" max="1000" step="1" value="20"> ms</input>
         </div>
         
         <div id="canvas-container">

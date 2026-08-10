@@ -43,6 +43,10 @@ const inputHeight = document.getElementById("height");
 document.getElementById("volume").addEventListener("change", e => gain_volume = e.target.value/100);
 document.getElementById("border").addEventListener("change", e => display_border = e.target.checked);
 
+document.getElementById("algo_delay").addEventListener("change", e => algo_delay = e.target.value);
+document.getElementById("maze_delay").addEventListener("change", e => maze_delay = e.target.value);
+document.getElementById("path_delay").addEventListener("change", e => path_delay = e.target.value);
+
 function dropDownFunction(a) {
     a.parentNode.getElementsByClassName("dropdown-content")[0].classList.toggle("show");
 }
@@ -314,39 +318,17 @@ function checkTesselation(size){
     return checkTesselation((size+1)/2);
 }
 //////////////////////////////////////////////// Init
-function init(algo){
+async function init(algo){
     if(grid==undefined)return;
     grid_copy = deepCopy(grid);
     var start = [0,0];
     var end = [width-1, height-1];
-    /*
-    if(!maze_generation){
-        grid = [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                [1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                [1, 1, 1, 0, 1, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 1, 1, 1, 1],
-                [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
-            
-        width = 11; height = 10;
-        start = [0, 0]; end = [6,7];
-        cell_sizepx = 20;
-        canvas.width  = width * cell_sizepx;
-        canvas.height  = height * cell_sizepx;
-        display_grid(width, height);
-        fill_grid(grid)
-    }
-    */
     var fmax  = width*height + Math.max(start[0], width-start[0]) **2 
                             + Math.max(start[1], height-start[1]) **2;
     display_grid(width, height);
     fill_grid(grid_copy);
     fill_cell(start[0], start[1], startColour); //blue
     fill_cell(end[0], end[1], endColour); //red
-    var path = algo(grid_copy, width, height, start, end, degrees);
+    var path = await algo(grid_copy, width, height, start, end, degrees);
+    await draw_path_animation(path, pathColour);
 }

@@ -36,16 +36,17 @@ async function dfs(grid, width, height, start, end, degrees) {
             !(x == start[0] && y == start[1]) &&
             !(x == end[0] && y == end[1])
         ) {
+            let colour = gradientColour(
+                    current_node.g,
+                    0,
+                    width + height,
+                    pathColour1,
+                    pathColour2
+                );
             fill_cell(
                 x,
                 y,
-                gradientColour(
-                    h,
-                    0,
-                    hmax,
-                    pathColour1,
-                    pathColour2
-                )
+                colour
             );
         }
 
@@ -65,9 +66,6 @@ async function dfs(grid, width, height, start, end, degrees) {
                 path.push(current);
                 current = current.parent;
             }
-
-            await draw_path_animation(path, pathColour);
-
             return path;
         }
 
@@ -104,6 +102,7 @@ async function dfs(grid, width, height, start, end, degrees) {
             new_node.h =
                 ((node_position[0] - end[0]) ** 2) +
                 ((node_position[1] - end[1]) ** 2);
+            new_node.g = current_node.g + 1
 
             children.push(new_node);
         }

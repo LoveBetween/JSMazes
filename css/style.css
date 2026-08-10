@@ -1,4 +1,18 @@
  /* Dropdown Button */
+body {
+  font-size: 16px;
+  line-height: 1.625;
+  color: #202013;
+  font-family: Nunito, sans-serif;
+}
+
+head {
+  font-size: 24px;
+  line-height: 1.625;
+  color: #202013;
+  font-family: Nunito, sans-serif;
+}
+
  .dropbtn {
     background-color: #3498DB;
     color: white;

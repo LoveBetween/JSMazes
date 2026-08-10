@@ -25,7 +25,6 @@ async function bfs(grid, width, height, start, end, degrees){
                 path.push(current);
                 current = current.parent; 
             }
-            draw_path_animation(path, pathColour);
             return path;
         }
 
@@ -46,10 +45,20 @@ async function bfs(grid, width, height, start, end, degrees){
             let h = ((node_position[0] - end[0]) ** 2) + ((node_position[1] - end[1]) ** 2);
             current_node.h = h
             playNote2(h, algo_delay);
-            if(!(node_position[0]==start[0] && node_position[1]==start[1]) && !(node_position[0]==end[0] && node_position[1]==end[1]));
-                fill_cell(node_position[0], node_position[1], gradientColour(h, 0, hmax, pathColour1, pathColour2));
+            if(!(node_position[0]===start[0] && node_position[1]===start[1]) && !(node_position[0]===end[0] && node_position[1]===end[1])){
+                let colour = gradientColour(
+                    current_node.g,
+                    0,
+                    width + height,
+                    pathColour1,
+                    pathColour2
+                );
+                fill_cell(node_position[0], node_position[1], colour);
+            }
+                
 //Create new node
             let new_node = new Node(current_node, node_position);
+            new_node.g = current_node.g + 1;
 //Append
             children.push(new_node);
         }
