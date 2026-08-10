@@ -29,7 +29,7 @@ async function RecursiveDivision(grid, width, height){
             }
             if(y2<height-1)if(grid[x][y2+1]==-1){
                 grid[x][y2]=0;
-                fill_cell(i,y2,bgColour);
+                fill_cell(x,y2,bgColour);
             }
             if(x1>0)if(grid[x1-1][y]==-1){
                 grid[x1][y]=0;
