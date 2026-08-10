@@ -4,6 +4,8 @@ var ctx = canvas.getContext("2d");
 var soundPlayer = new Audio();
 soundPlayer.src = "sounds/coin.mp3";
 soundPlayer.mozPreservesPitch = false;
+let audioCtx = null;
+let masterGain = null;
 //////////////////////////////////////////////// grid setup
 var grid, grid_copy;
 var width = 21, height = 21;
@@ -66,6 +68,21 @@ function evenNumberAlert(){
 }
 //////////////////////////////////////////////// sound
 //plays a soundfile at different frequencies
+function initAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        masterGain = audioCtx.createGain();
+        masterGain.gain.value = gain_volume;
+        masterGain.connect(audioCtx.destination);
+    }
+
+    if (audioCtx.state === "suspended") {
+        return audioCtx.resume();
+    }
+
+    return Promise.resolve();
+}
 async function playNote(f){
     if(!f)return;
     fmax=Math.sqrt(81);
@@ -78,7 +95,7 @@ async function playNote(f){
 //plays an oscillator at different frequencies
 async function playNote2(frequency, duration) {
     // create Oscillator node
-    var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+    await initAudio();
     var volume = audioCtx.createGain();
     volume.connect(audioCtx.destination);
     volume.gain.value = gain_volume;

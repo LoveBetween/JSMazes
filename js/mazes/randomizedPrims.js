@@ -21,6 +21,7 @@ async function RandomizedPrims(grid, width, height){
         x = list_wall[r][0]; 
         y = list_wall[r][1];
         list_wall.splice(r,1);
+        let carved = false
         
         if(x<0 || x>=width || y<0 || y>=height)
             continue;
@@ -34,7 +35,7 @@ async function RandomizedPrims(grid, width, height){
                     fill_cell(x,y,bgColour);
                     // play note
                     let h = ((x - width) ** 2) + ((y - height) ** 2);
-                    playNote2(h, algo_delay);
+
                     list_wall.push([x-1,y],[x,y+1],[x,y-1]);
                 }
                 else{
@@ -44,9 +45,10 @@ async function RandomizedPrims(grid, width, height){
                     fill_cell(x,y,bgColour);
                     // play note
                     let h = ((x - width) ** 2) + ((y - height) ** 2);
-                    playNote2(h, algo_delay);
+
                     list_wall.push([x+1,y],[x,y+1],[x,y-1]);
                 }
+                carved = true;
             }
         }
         else if(grid[x][y+1]==0^grid[x][y-1]==0){
@@ -58,7 +60,6 @@ async function RandomizedPrims(grid, width, height){
                 fill_cell(x,y,bgColour);
                 // play note
                 let h = ((x - width) ** 2) + ((y - height) ** 2);
-                playNote2(h, algo_delay);
                 list_wall.push([x+1,y],[x-1,y],[x,y-1]);
             }
             else{
@@ -68,12 +69,16 @@ async function RandomizedPrims(grid, width, height){
                 fill_cell(x,y,bgColour);
                 // play note
                 let h = ((x - width) ** 2) + ((y - height) ** 2);
-                playNote2(h, algo_delay);
                 list_wall.push([x+1,y],[x-1,y],[x,y+1]);
             }
+            carved = true;
         }
-        if (maze_delay)
+        if (carved && maze_delay){
+            let h = ((x - width) ** 2) + ((y - height) ** 2);
+            playNote2(h, algo_delay);
             await delay(maze_delay);
+        }
+            
     }
     endTimer("RandomizedPrims");
 }
